@@ -1,4 +1,3 @@
-import "whatwg-fetch";
 import "@testing-library/jest-dom";
 import {
   render,
@@ -6,8 +5,8 @@ import {
   fireEvent,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { resetData } from "../mocks/handlers";
-import { server } from "../mocks/server";
+import { resetData } from "./mocks/handlers";
+import { server } from "./mocks/server";
 import ShoppingList from "../components/ShoppingList";
 
 beforeAll(() => server.listen());
@@ -51,7 +50,6 @@ test("adds a new item to the list when the ItemForm is submitted", async () => {
   const desserts = await screen.findAllByText(/Dessert/);
   expect(desserts.length).toBe(dessertCount + 1);
 
-  // Rerender the component to ensure the item was persisted
   rerender(<ShoppingList />);
 
   const rerenderedIceCream = await screen.findByText(/Ice Cream/);
@@ -71,7 +69,6 @@ test("updates the isInCart status of an item when the Add/Remove from Cart butto
   const removeButton = await screen.findByText(/Remove From Cart/);
   expect(removeButton).toBeInTheDocument();
 
-  // Rerender the component to ensure the item was persisted
   rerender(<ShoppingList />);
 
   const rerenderedAddButtons = await screen.findAllByText(/Add to Cart/);
@@ -93,8 +90,7 @@ test("removes an item from the list when the delete button is clicked", async ()
   fireEvent.click(deleteButtons[0]);
 
   await waitForElementToBeRemoved(() => screen.queryByText(/Yogurt/));
-
-  // Rerender the component to ensure the item was persisted
+  
   rerender(<ShoppingList />);
 
   const rerenderedDeleteButtons = await screen.findAllByText(/Delete/);
